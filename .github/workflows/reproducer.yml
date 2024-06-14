@@ -17,7 +17,7 @@ jobs:
           # Start Verdaccio
           npx verdaccio --config verdaccio.yml &
           # Wait for verdaccio for up to 10 seconds on IPv6 port
-          npx wait-on http://localhost:4873 --timeout 10000
+          npx wait-on http://localhost:0.0.0.0:4873 --timeout 10000
         continue-on-error: true
       - name: Check Verdaccio port
         run: |
