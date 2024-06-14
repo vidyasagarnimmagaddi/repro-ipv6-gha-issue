@@ -1,6 +1,6 @@
 name: Pre-merge
 
-on: push
+on: [pull_request, push]
 
 jobs:
   reproducer:
@@ -32,5 +32,3 @@ jobs:
           fi
       - name: Print open ports
         run: netstat -ano
-      - name: check vercaddio
-        run: sudo netstat -tuln | grep '4873'
