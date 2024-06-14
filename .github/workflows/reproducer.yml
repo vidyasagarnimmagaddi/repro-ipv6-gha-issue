@@ -12,6 +12,9 @@ jobs:
         uses: actions/setup-node@v4
       - name: Install net-tools
         run: sudo apt install net-tools
+      - name: Configure Verdaccio for IPv4
+        run: |
+          echo "listen:\n  - 0.0.0.0:4873" > verdaccio.yml
       - name: Run verdaccio & Wait for it
         run: |
           # Start Verdaccio
@@ -22,19 +25,12 @@ jobs:
       - name: Check Verdaccio port and IP version
         run: |
           echo "Checking if Verdaccio is running on an IPv4 or IPv6 address:"
-          netstat -tuln | grep 4873
+          if netstat -tuln | grep 4873 | grep -q tcp6; then
+            echo "Verdaccio is running on IPv6."
+          elif netstat -tuln | grep 4873 | grep -q tcp; then
+            echo "Verdaccio is running on IPv4."
+          else
+            echo "Verdaccio is not running on port 4873."
+          fi
       - name: Print open ports
         run: netstat -ano
-      - name: Check Verdaccio port and IP version
-        run: |
-          echo "Checking if Verdaccio is running on an IPv4 or IPv6 address:"
-          if netstat -tuln | grep 4873 | grep -q tcp6; then
-          echo "Verdaccio is running on IPv6."
-          elif netstat -tuln | grep 4873 | grep -q tcp; then
-          echo "Verdaccio is running on IPv4."
-          else
-          echo "Verdaccio is not running on port 4873."
-          fi
-      - name: Configure Verdaccio for IPv4
-        run: |
-         echo "listen:\n  - 0.0.0.0:4873" > verdaccio.yml
