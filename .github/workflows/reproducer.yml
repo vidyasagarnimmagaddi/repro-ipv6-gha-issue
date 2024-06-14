@@ -22,3 +22,5 @@ jobs:
         continue-on-error: true
       - name: Print open ports
         run: netstat -ano
+      - name: print specific port
+        run: netstat -ano | grep 4873
