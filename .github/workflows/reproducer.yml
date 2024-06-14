@@ -25,3 +25,13 @@ jobs:
           netstat -tuln | grep 4873
       - name: Print open ports
         run: netstat -ano
+      - name: Check Verdaccio port and IP version
+        run: |
+          echo "Checking if Verdaccio is running on an IPv4 or IPv6 address:"
+          if netstat -tuln | grep 4873 | grep -q tcp6; then
+          echo "Verdaccio is running on IPv6."
+          elif netstat -tuln | grep 4873 | grep -q tcp; then
+          echo "Verdaccio is running on IPv4."
+          else
+          echo "Verdaccio is not running on port 4873."
+          fi
