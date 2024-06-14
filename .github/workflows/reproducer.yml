@@ -12,12 +12,16 @@ jobs:
         uses: actions/setup-node@v4
       - name: Install net-tools
         run: sudo apt install net-tools
+      - name: Configure Verdaccio for IPv4
+        run: |
+          # Assuming verdaccio.yml is in the current directory and uses the 'listen' field
+          echo "listen: - 0.0.0.0:4873" > verdaccio.yml
       - name: Run verdaccio & Wait for it
         run: |
           # Start Verdaccio
           npx verdaccio --config verdaccio.yml &
-          # Wait for verdaccio for up to 10 seconds on IPv6 port
-          npx wait-on http://localhost:0.0.0.0:4873 --timeout 10000
+          # Wait for verdaccio for up to 10 seconds on IPv4 port
+          npx wait-on http://localhost:4873 --timeout 10000
         continue-on-error: true
       - name: Check Verdaccio port
         run: |
