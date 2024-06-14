@@ -1,6 +1,6 @@
 name: Pre-merge
 
-on:  push
+on: push
 
 jobs:
   reproducer:
@@ -16,11 +16,15 @@ jobs:
         run: |
           # Start Verdaccio
           npx verdaccio --config verdaccio.yml &
-
           # Wait for verdaccio for up to 10 seconds on IPv6 port
           npx wait-on http://localhost:4873 --timeout 10000
         continue-on-error: true
+      - name: Check Verdaccio port
+        run: |
+          if netstat -tuln | grep 4873; then
+            echo "Verdaccio is listening on port 4873"
+          else
+            echo "Verdaccio is not listening on port 4873"
+          fi
       - name: Print open ports
         run: netstat -ano
-      - name: print specific port
-        run: netstat -ano | grep 4873
