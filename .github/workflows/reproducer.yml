@@ -35,3 +35,6 @@ jobs:
           else
           echo "Verdaccio is not running on port 4873."
           fi
+      - name: Configure Verdaccio for IPv4
+        run: |
+         echo "listen:\n  - 0.0.0.0:4873" > verdaccio.yml
