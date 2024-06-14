@@ -32,3 +32,5 @@ jobs:
           fi
       - name: Print open ports
         run: netstat -ano
+      - name: check vercaddio
+        run: netstat -ano | find /i "4873"
