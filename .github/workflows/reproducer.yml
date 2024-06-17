@@ -1,6 +1,6 @@
 name: Pre-merge
 
-on: push
+on: [pull_request, push]
 
 jobs:
   reproducer:
@@ -13,6 +13,7 @@ jobs:
         run: |
           sed -i 's/^# - localhost:4873$/- localhost:4873/g' verdaccio.yml
           sed -i 's/^- "\[::1\]:4873"$/# - "[::1]:4873"/g' verdaccio.yml
+          echo "Listen address updated to IPv4: localhost:4873"
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -31,10 +32,3 @@ jobs:
 
       - name: Print open ports
         run: netstat -ano
-      - name: Check Verdaccio port
-        run: |
-          if netstat -tuln | grep 4873; then
-            echo "Verdaccio is listening on port 4873"
-          else
-            echo "Verdaccio is not listening on port 4873"
-          fi
