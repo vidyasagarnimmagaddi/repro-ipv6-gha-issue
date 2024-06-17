@@ -31,3 +31,10 @@ jobs:
 
       - name: Print open ports
         run: netstat -ano
+      - name: Check Verdaccio port
+        run: |
+          if netstat -tuln | grep 4873; then
+            echo "Verdaccio is listening on port 4873"
+          else
+            echo "Verdaccio is not listening on port 4873"
+          fi
