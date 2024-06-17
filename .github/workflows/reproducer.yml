@@ -1,6 +1,6 @@
 name: Pre-merge
 
-on: push
+on: [pull_request, push]
 
 jobs:
   reproducer:
@@ -8,33 +8,26 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Update Verdaccio Config
+        run: |
+          sed -i 's/^# - localhost:4873$/- localhost:4873/g' verdaccio.yml
+          sed -i 's/^- "\[::1\]:4873"$/# - "[::1]:4873"/g' verdaccio.yml
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
+
       - name: Install net-tools
         run: sudo apt install net-tools
+
       - name: Run verdaccio & Wait for it
         run: |
           # Start Verdaccio
           npx verdaccio --config verdaccio.yml &
-          # Wait for verdaccio for up to 10 seconds on port 4873
+
+          # Wait for verdaccio for up to 10 seconds on IPv4 port
           npx wait-on http://localhost:4873 --timeout 10000
         continue-on-error: true
-      - name: Check Verdaccio port and IP version
-        run: |
-          echo "Checking if Verdaccio is running on an IPv4 or IPv6 address:"
-          netstat -tuln | grep 4873
+
       - name: Print open ports
         run: netstat -ano
-      - name: Check Verdaccio port and IP version
-        run: |
-          echo "Checking if Verdaccio is running on an IPv4 or IPv6 address:"
-          if netstat -tuln | grep 4873 | grep -q tcp6; then
-          echo "Verdaccio is running on IPv6."
-          elif netstat -tuln | grep 4873 | grep -q tcp; then
-          echo "Verdaccio is running on IPv4."
-          else
-          echo "Verdaccio is not running on port 4873."
-          fi
-      - name: Configure Verdaccio for IPv4
-        run: |
-         echo "listen:\n  - 0.0.0.0:4873" > verdaccio.yml
