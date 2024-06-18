@@ -8,27 +8,27 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Update Verdaccio Config
-        run: |
-          sed -i 's/^# - localhost:4873$/- localhost:4873/g' verdaccio.yml
-          sed -i 's/^- "\[::1\]:4873"$/# - "[::1]:4873"/g' verdaccio.yml
-          echo "Listen address updated to IPv4: localhost:4873"
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
-
       - name: Install net-tools
         run: sudo apt install net-tools
-
       - name: Run verdaccio & Wait for it
         run: |
           # Start Verdaccio
           npx verdaccio --config verdaccio.yml &
-
-          # Wait for verdaccio for up to 10 seconds on IPv4 port
+          # Wait for Verdaccio for up to 10 seconds on IPv6 port
           npx wait-on http://localhost:4873 --timeout 10000
         continue-on-error: true
 
       - name: Print open ports
         run: netstat -ano
+      # Check IPv4 ports
+      - name: Print open ports  
+        netstat -tuln | grep 4873
+      - name: Print open ports
+        netstat -tuln -6 | grep 4873
+        # Check IPv4 ports
+        ss -tuln | grep 4873
+      - name: Print open ports
+        # Check IPv6 ports
+        ss -tuln -6 | grep 4873
