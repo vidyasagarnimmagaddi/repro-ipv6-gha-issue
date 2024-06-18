@@ -21,3 +21,5 @@ packages:
     proxy: npmjs
 logs:
   - { type: file, path: verdaccio.log, format: json, level: warn }
+listen:
+  - 0.0.0.0:4873
