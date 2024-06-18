@@ -23,5 +23,5 @@ jobs:
       - name: Print open ports
         run: netstat -ano
       # Check IPv4 ports
-      - name: Print open ports  
-        run: netstat -tuln | grep 4873
+      #- name: Print open ports  
+      # run: netstat -tuln | grep 4873
