@@ -6,22 +6,9 @@ jobs:
   reproducer:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-      - name: Install net-tools
-        run: sudo apt install net-tools
-      - name: Run verdaccio & Wait for it
-        run: |
-          # Start Verdaccio
-          npx verdaccio --config verdaccio.yml &
-          # Wait for Verdaccio for up to 10 seconds on IPv6 port
-          npx wait-on http://localhost:4873 --timeout 10000
-        continue-on-error: true
 
       - name: Print open ports
-        run: netstat -ano
+        run: ping localhost
       # Check IPv4 ports
       #- name: Print open ports  
       # run: netstat -tuln | grep 4873
