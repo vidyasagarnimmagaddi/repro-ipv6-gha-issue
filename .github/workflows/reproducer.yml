@@ -24,11 +24,12 @@ jobs:
         run: netstat -ano
       # Check IPv4 ports
       - name: Print open ports  
-        netstat -tuln | grep 4873
+        run: netstat -tuln | grep 4873
       - name: Print open ports
-        netstat -tuln -6 | grep 4873
+        run: netstat -tuln -6 | grep 4873
+      - name: Print open ports ipv4
         # Check IPv4 ports
-        ss -tuln | grep 4873
-      - name: Print open ports
+        run: ss -tuln | grep 4873 
+      - name: Print open ports ipv6
         # Check IPv6 ports
-        ss -tuln -6 | grep 4873
+        run: ss -tuln -6 | grep 4873
