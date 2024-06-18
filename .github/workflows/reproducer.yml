@@ -27,9 +27,3 @@ jobs:
         run: netstat -tuln | grep 4873
       - name: Print open ports
         run: netstat -tuln -6 | grep 4873
-      - name: Print open ports ipv4
-        # Check IPv4 ports
-        run: ss -tuln | grep 4873 
-      - name: Print open ports ipv6
-        # Check IPv6 ports
-        run: ss -tuln -6 | grep 4873
